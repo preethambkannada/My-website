@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preetham's Personal Webpage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    /* CSS STARTS HERE */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    :root {
+        --primary-blue: #007bff;
+        --light-blue: #e0f7fa;
+        --dark-blue: #0056b3;
+        --text-dark: #333;
+        --text-light: #f8f9fa;
+        --background-light: #ffffff;
+        --background-dark: #222;
+        --button-bg: #007bff;
+        --button-hover-bg: #0056b3;
+    }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    body {
+        background-color: var(--light-blue);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: var(--text-dark);
+    }
+    .container {
+        background-color: var(--background-light);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px;
+    }
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        background: linear-gradient(to right, #e0f7fa, #c5e1e6);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: var(--primary-blue);
+    }
+    .navbar ul {
+        list-style: none;
+        display: flex;
+    }
+    .navbar ul li {
+        margin-left: 30px;
+    }
+    .navbar ul li a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 600;
+        font-size: 1em;
+        padding: 8px 12px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    .navbar ul li a:hover {
+        background-color: var(--primary-blue);
+        color: var(--text-light);
+    }
+    .navbar ul li a.active {
+        background-color: var(--background-dark);
+        color: var(--text-light);
+    }
+    .content-section {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 40px;
+        gap: 30px;
+        align-items: center;
+        justify-content: center;
+    }
+    .content-section.hidden {
+        display: none;
+    }
+    #home .text-content {
+        flex: 1;
+        min-width: 300px;
+    }
+    #home .text-content h1 {
+        font-size: 2.8em;
+        color: var(--primary-blue);
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+    #home .text-content p {
+        font-size: 1.1em;
+        line-height: 1.7;
+        margin-bottom: 30px;
+        color: #555;
+    }
+    #home .buttons {
+        display: flex;
+        gap: 15px;
+    }
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .btn.try-now {
+        background-color: var(--button-bg);
+        color: var(--text-light);
+    }
+    .btn.try-now:hover {
+        background-color: var(--button-hover-bg);
+    }
+    .btn.learn-more {
+        background-color: transparent;
+        border: 2px solid var(--primary-blue);
+        color: var(--primary-blue);
+    }
+    .btn.learn-more:hover {
+        background-color: var(--primary-blue);
+        color: var(--text-light);
+    }
+    #home .image-content {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #home .image-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    #education {
+        flex-direction: column;
+    }
+    #education h2 {
+        font-size: 2.5em;
+        color: var(--primary-blue);
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    .education-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        width: 100%;
+    }
+    .education-item {
+        background-color: #f0f8ff;
+        border: 1px solid #cce7ff;
+        border-radius: 10px;
+        padding: 25px;
+        text-align: center;
+        flex: 1;
+        min-width: 280px;
+        max-width: 350px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+    .education-item:hover {
+        transform: translateY(-5px);
+    }
+    .education-icon {
+        font-size: 3em;
+        color: var(--primary-blue);
+        margin-bottom: 15px;
+    }
+    .education-item h3 {
+        font-size: 1.5em;
+        color: var(--dark-blue);
+        margin-bottom: 10px;
+    }
+    .education-item p {
+        font-size: 1em;
+        color: #666;
+    }
+    .education-item.current {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px var(--primary-blue);
+    }
+    #contact {
+        flex-direction: column;
+    }
+    #contact h2 {
+        font-size: 2.5em;
+        color: var(--primary-blue);
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .contact-form {
+        width: 100%;
+        max-width: 600px;
+        background-color: #f0f8ff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-dark);
+    }
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+        outline: none;
+    }
+    .submit-btn {
+        width: 100%;
+        background-color: var(--button-bg);
+        color: var(--text-light);
+        padding: 15px;
+        font-size: 1.1em;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .social-links {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .social-icon {
+        font-size: 2.5em;
+        color: var(--primary-blue);
+    }
+    @media (max-width: 768px) {
+        .navbar {
+            flex-direction: column;
+        }
+        .navbar ul {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .content-section {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="navbar">
+            <div class="logo">Preetham</div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="nav-item active" data-section="home">HOME</a></li>
+                    <li><a href="#education" class="nav-item" data-section="education">EDUCATION</a></li>
+                    <li><a href="#contact" class="nav-item" data-section="contact">CONTACT ME</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="content-section" id="home">
+            <div class="text-content">
+                <h1>WELCOME TO PREETHAM'S PERSONAL WEBPAGE</h1>
+                <p>I am Preetham, a dedicated learner currently pursuing a Diploma in EEE. I’m also learning web development and Indian law acts step-by-step.</p>
+                <div class="buttons">
+                    <a href="mailto:preethamb330@gmail.com" class="btn try-now">Contact Me</a>
+                    <a href="#education" class="btn learn-more">Learn More</a>
+                </div>
+            </div>
+            <div class="image-content">
+                <img src="1000016397-removebg-preview.png" alt="Student Learning Illustration">
+            </div>
+        </main>
+
+        <main class="content-section hidden" id="education">
+            <h2>My Educational Journey</h2>
+            <div class="education-content">
+                <div class="education-item completed">
+                    <i class="fas fa-book-reader education-icon"></i>
+                    <h3>10th Completed</h3>
+                    <p>Successfully completed 10th grade.</p>
+                </div>
+                <div class="education-item current">
+                    <i class="fas fa-graduation-cap education-icon"></i>
+                    <h3>Diploma in EEE</h3>
+                    <p>Currently studying Diploma in Electrical and Electronics Engineering.</p>
+                </div>
+                <div class="education-item future">
+                    <i class="fas fa-microchip education-icon"></i>
+                    <h3>Future: Engineering</h3>
+                    <p>Planning to study engineering next.</p>
+                </div>
+            </div>
+        </main>
+
+        <main class="content-section hidden" id="contact">
+            <h2>Contact Me</h2>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn submit-btn">Send Message</button>
+            </form>
+            <div class="social-links">
+                <a href="https://instagram.com" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://twitter.com" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        const showSection = (sectionId) => {
+            contentSections.forEach(section => section.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            navItems.forEach(item => item.classList.remove('active'));
+            document.querySelector(`.nav-item[data-section="${sectionId}"]`).classList.add('active');
+        };
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = item.getAttribute('data-section');
+                showSection(sectionId);
+            });
+        });
+
+        const initialHash = window.location.hash.substring(1);
+        if (initialHash && document.getElementById(initialHash)) {
+            showSection(initialHash);
+        } else {
+            showSection('home');
+        }
+
+        const contactForm = document.querySelector('.contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData.entries());
+                console.log('Form Submitted:', data);
+                alert('Thank you for your message!');
+                contactForm.reset();
+            });
+        }
+    });
+    </script>
+</body>
+</html>
