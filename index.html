@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -253,17 +252,79 @@
         font-size: 2.5em;
         color: var(--primary-blue);
     }
+
+    /* --- Media Queries for Mobile View --- */
     @media (max-width: 768px) {
         .navbar {
             flex-direction: column;
+            padding: 15px 20px;
         }
         .navbar ul {
             flex-wrap: wrap;
             justify-content: center;
+            margin-top: 15px;
         }
+        .navbar ul li {
+            margin: 5px 10px; /* Adjust spacing for smaller screens */
+        }
+        .logo {
+            font-size: 1.5em; /* Smaller logo on mobile */
+        }
+
         .content-section {
             flex-direction: column;
             text-align: center;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        #home .text-content h1 {
+            font-size: 2em; /* Smaller heading on mobile */
+            margin-bottom: 15px;
+        }
+        #home .text-content p {
+            font-size: 1em; /* Smaller paragraph text */
+            margin-bottom: 20px;
+        }
+        #home .buttons {
+            flex-direction: column; /* Stack buttons vertically */
+            gap: 10px;
+        }
+        .btn {
+            width: 100%; /* Make buttons full width */
+            padding: 10px 20px;
+        }
+
+        #education h2, #contact h2 {
+            font-size: 2em; /* Smaller headings for sections */
+            margin-bottom: 20px;
+        }
+
+        .education-item {
+            min-width: unset; /* Remove min-width constraint */
+            max-width: 90%; /* Allow items to take more width on mobile */
+            margin-bottom: 15px; /* Add some space between stacked items */
+        }
+
+        .contact-form {
+            padding: 20px;
+        }
+        .social-links {
+            justify-content: center; /* Center social icons */
+        }
+    }
+
+    /* Even smaller screens (e.g., small phones) */
+    @media (max-width: 480px) {
+        .navbar ul li a {
+            font-size: 0.9em; /* Smaller nav items */
+            padding: 6px 10px;
+        }
+        #home .text-content h1 {
+            font-size: 1.8em;
+        }
+        #home .text-content p {
+            font-size: 0.95em;
         }
     }
     </style>
@@ -284,7 +345,7 @@
         <main class="content-section" id="home">
             <div class="text-content">
                 <h1>WELCOME TO PREETHAM'S PERSONAL WEBPAGE</h1>
-                <p>I am Preetham, a dedicated learner currently pursuing a Diploma in EEE. I’m also learning web development.</p>
+                <p>I am Preetham, a dedicated learner currently pursuing a Diploma in EEE. I’m also learning web development and Indian law acts step-by-step.</p>
                 <div class="buttons">
                     <a href="mailto:preethamb330@gmail.com" class="btn try-now">Contact Me</a>
                     <a href="#education" class="btn learn-more">Learn More</a>
@@ -334,7 +395,7 @@
                 <button type="submit" class="btn submit-btn">Send Message</button>
             </form>
             <div class="social-links">
-                <a href="https://instagram.com" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.instagram.com/preetham_b____?igsh=NmFmOTg3ajB3OTAy" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
                 <a href="https://wa.me/" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://twitter.com" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>
             </div>
@@ -353,6 +414,13 @@
             document.querySelector(`.nav-item[data-section="${sectionId}"]`).classList.add('active');
         };
 
+        const initialHash = window.location.hash.substring(1);
+        if (initialHash && document.getElementById(initialHash)) {
+            showSection(initialHash);
+        } else {
+            showSection('home');
+        }
+
         navItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -360,13 +428,6 @@
                 showSection(sectionId);
             });
         });
-
-        const initialHash = window.location.hash.substring(1);
-        if (initialHash && document.getElementById(initialHash)) {
-            showSection(initialHash);
-        } else {
-            showSection('home');
-        }
 
         const contactForm = document.querySelector('.contact-form');
         if (contactForm) {
