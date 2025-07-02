@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Electric Bill Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #1c2237, #2a364f);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ecf0f1;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .calculator-container {
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #6dd5ed;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            letter-spacing: 0.8px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #a7b1c2;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .bill-details {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+            display: none; /* Hidden by default */
+        }
+
+        .bill-details h4 {
+            color: #97f2e3;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .bill-details p {
+            margin-bottom: 8px;
+            color: #d0d8e4;
+            font-size: 0.95em;
+        }
+
+        .bill-details strong {
+            color: #a7ff83;
+        }
+
+        .total-payable {
+            text-align: right;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.1em;
+        }
+
+        button {
+            background-color: #4bc6b7;
+            color: #1c2237;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        #calculationHistory {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #calculationHistory h3 {
+            color: #97f2e3;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        #historyList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #historyList li {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        #historyList li span {
+            font-size: 0.9em;
+            color: #d0d8e4;
+        }
+
+        #historyList li strong {
+            color: #a7ff83;
+        }
+
+        #historyList li:last-child {
+            margin-bottom: 0;
+        }
+
+        .clear-button {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+            align-self: center;
+        }
+
+        .clear-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h2><span style="color: #4bc6b7;">E</span>lectric <span style="color: #6dd5ed;">B</span>ill <span style="color: #a7ff83;">C</span>alculator</h2>
+        <div class="input-group">
+            <label for="unitsConsumed">Units Consumed:</label>
+            <input type="number" id="unitsConsumed" placeholder="Enter units consumed">
+        </div>
+        <div class="input-group">
+            <label for="subsidyUnits">Subsidy Units (if any):</label>
+            <input type="number" id="subsidyUnits" value="0" placeholder="Enter subsidy units">
+        </div>
+        <div class="input-group">
+            <label for="costPerUnit">Cost per Unit (₹):</label>
+            <input type="number" id="costPerUnit" placeholder="Enter cost per unit">
+        </div>
+        <div class="input-group">
+            <label for="fixedCharges">Fixed Charges (₹):</label>
+            <input type="number" id="fixedCharges" value="145" placeholder="Enter fixed charges">
+        </div>
+        <div class="input-group">
+            <label for="fppcaRate">FPCCA Charges Rate:</label>
+            <input type="number" id="fppcaRate" value="0.3" placeholder="Enter FPCCA rate">
+        </div>
+        <div class="input-group">
+            <label for="pgSurchargeRate">P&G Surcharge Rate:</label>
+            <input type="number" id="pgSurchargeRate" value="0.36" placeholder="Enter P&G Surcharge rate">
+        </div>
+        <div class="input-group">
+            <label for="taxRate">Tax on Energy Charges (%):</label>
+            <input type="number" id="taxRate" value="9" placeholder="Enter tax rate">
+        </div>
+
+        <button onclick="calculateAndStore()">Calculate & Store</button>
+
+        <div id="billOutput" class="bill-details">
+            <h4>Bill Details</h4>
+            <p>Units Consumed: <strong id="outputUnitsConsumed"></strong></p>
+            <p>Subsidy Units: <strong id="outputSubsidyUnits"></strong></p>
+            <p>Chargeable Units: <strong id="outputChargeableUnits"></strong></p>
+            <hr style="border-top: 1px solid rgba(255, 255, 255, 0.2); margin: 10px 0;">
+            <p>Fixed Charges: ₹<strong id="outputFixedCharges"></strong></p>
+            <p>Energy Charges (<span id="outputUnitsForEnergy"></span> × <span id="outputCostPerUnit"></span>): ₹<strong id="outputEnergyCharges"></strong></p>
+            <p>FPCCA Charges (<span id="outputUnitsForFPCCA"></span> × <span id="outputFppcaRate"></span>): ₹<strong id="outputFppcaCharges"></strong></p>
+            <p>P&G Surcharge (<span id="outputUnitsForPG"></span> × <span id="outputPgSurchargeRate"></span>): ₹<strong id="outputPgSurcharge"></strong></p>
+            <p>Tax on Energy Charges (@<span id="outputTaxRate"></span>%): ₹<strong id="outputTaxAmount"></strong></p>
+            <p>Subtotal-1: ₹<strong id="outputSubtotalGross"></strong></p>
+            <hr style="border-top: 1px solid rgba(255, 255, 255, 0.2); margin: 10px 0;">
+            <p>Subsidy (Gruha Jyothi): ₹<strong id="outputSubsidyAmount">0.00</strong></p>
+            <p>Subtotal-2: ₹<strong id="outputSubtotalSubsidy"></strong></p>
+            <hr style="border-top: 1px solid rgba(255, 255, 255, 0.2); margin: 10px 0;">
+            <div class="total-payable">Total Payable: ₹<strong id="outputTotalPayable">0.00</strong></div>
+        </div>
+    </div>
+
+    <div id="calculationHistory">
+        <h3>Calculation History</h3>
+        <ul id="historyList">
+            </ul>
+        <button class="clear-button" onclick="clearHistory()">Clear History</button>
+    </div>
+
+    <script>
+        let calculationHistory = [];
+
+        // Load history from local storage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedHistory = localStorage.getItem('electricBillHistory');
+            if (storedHistory) {
+                calculationHistory = JSON.parse(storedHistory);
+                displayHistory();
+            } else {
+                displayHistory(); // Show "No calculation history yet." message
+            }
+        });
+
+        function calculateAndStore() {
+            const unitsConsumedInput = document.getElementById("unitsConsumed");
+            const subsidyUnitsInput = document.getElementById("subsidyUnits");
+            const costPerUnitInput = document.getElementById("costPerUnit");
+            const fixedChargesInput = document.getElementById("fixedCharges");
+            const fppcaRateInput = document.getElementById("fppcaRate");
+            const pgSurchargeRateInput = document.getElementById("pgSurchargeRate");
+            const taxRateInput = document.getElementById("taxRate");
+            const billOutputDiv = document.getElementById("billOutput");
+
+            const unitsConsumed = parseFloat(unitsConsumedInput.value) || 0;
+            const subsidyUnits = parseFloat(subsidyUnitsInput.value) || 0;
+            const costPerUnit = parseFloat(costPerUnitInput.value) || 0;
+            const fixedCharges = parseFloat(fixedChargesInput.value) || 0;
+            const fppcaRate = parseFloat(fppcaRateInput.value) || 0;
+            const pgSurchargeRate = parseFloat(pgSurchargeRateInput.value) || 0;
+            const taxRate = parseFloat(taxRateInput.value) || 0;
+
+            const chargeableUnits = Math.max(0, unitsConsumed - subsidyUnits);
+            const energyCharges = chargeableUnits * costPerUnit;
+            const fppcaCharges = chargeableUnits * fppcaRate;
+            const pgSurcharge = chargeableUnits * pgSurchargeRate;
+            const taxAmount = energyCharges * (taxRate / 100);
+            const subtotalGross = fixedCharges + energyCharges + fppcaCharges + pgSurcharge + taxAmount;
+            const totalPayable = subtotalGross; // Assuming Gruha Jyothi subsidy is directly reducing the payable
+
+            // Update the bill output section
+            document.getElementById("outputUnitsConsumed").textContent = unitsConsumed;
+            document.getElementById("outputSubsidyUnits").textContent = subsidyUnits;
+            document.getElementById("outputChargeableUnits").textContent = chargeableUnits;
+            document.getElementById("outputFixedCharges").textContent = fixedCharges.toFixed(2);
+            document.getElementById("outputEnergyCharges").textContent = energyCharges.toFixed(2);
+            document.getElementById("outputUnitsForEnergy").textContent = chargeableUnits;
+            document.getElementById("outputCostPerUnit").textContent = costPerUnit.toFixed(2);
+            document.getElementById("outputFppcaCharges").textContent = fppcaCharges.toFixed(2);
+            document.getElementById("outputUnitsForFPCCA").textContent = chargeableUnits;
+            document.getElementById("outputFppcaRate").textContent = fppcaRate.toFixed(2);
+            document.getElementById("outputPgSurcharge").textContent = pgSurcharge.toFixed(2);
+            document.getElementById("outputUnitsForPG").textContent = chargeableUnits;
+            document.getElementById("outputPgSurchargeRate").textContent = pgSurchargeRate.toFixed(2);
+            document.getElementById("outputTaxAmount").textContent = taxAmount.toFixed(2);
+            document.getElementById("outputTaxRate").textContent = taxRate.toFixed(2);
+            document.getElementById("outputSubtotalGross").textContent = subtotalGross.toFixed(2);
+            document.getElementById("outputSubtotalSubsidy").textContent = subtotalGross.toFixed(2); // Assuming no separate subtotal after subsidy in this simplified view
+            document.getElementById("outputTotalPayable").textContent = totalPayable.toFixed(2);
+
+            billOutputDiv.style.display = 'block';
+
+            const calculationData = {
+                unitsConsumed,
+                subsidyUnits,
+                costPerUnit,
+                fixedCharges,
+                fppcaRate,
+                pgSurchargeRate,
+                taxRate,
+                chargeableUnits,
+                energyCharges: energyCharges.toFixed(2),
+                fppcaCharges: fppcaCharges.toFixed(2),
+                pgSurcharge: pgSurcharge.toFixed(2),
+                taxAmount: taxAmount.toFixed(2),
+                totalPayable: totalPayable.toFixed(2),
+                timestamp: new Date().toLocaleString()
+            };
+
+            calculationHistory.push(calculationData);
+            localStorage.setItem('electricBillHistory', JSON.stringify(calculationHistory));
+            displayHistory();
+
+            // Clear input fields after calculation
+            unitsConsumedInput.value = '';
+            subsidyUnitsInput.value = '';
+            costPerUnitInput.value = '';
+        }
+
+        function displayHistory() {
+            const historyList = document.getElementById("historyList");
+            historyList.innerHTML = ''; // Clear the current list
+
+            if (calculationHistory.length === 0) {
+                const listItem = document.createElement('li');
+                listItem.textContent = 'No calculation history yet.';
+                historyList.appendChild(listItem);
+            } else {
+                calculationHistory.forEach((calculation, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <span><strong>Timestamp:</strong> ${calculation.timestamp}</span>
+                        <span>Units: <strong>${calculation.unitsConsumed}</strong>, Subsidy: <strong>${calculation.subsidyUnits}</strong>, Chargeable: <strong>${calculation.chargeableUnits}</strong></span>
+                        <span>Cost/Unit: ₹<strong>${calculation.costPerUnit}</strong>, Fixed Charges: ₹<strong>${calculation.fixedCharges}</strong></span>
+                        <span>FPCCA: ₹<strong>${calculation.fppcaCharges}</strong> (${calculation.fppcaRate}), P&G Surcharge: ₹<strong>${calculation.pgSurcharge}</strong> (${calculation.pgSurchargeRate})</span>
+                        <span>Tax (@${calculation.taxRate}%): ₹<strong>${calculation.taxAmount}</strong></span>
+<span>Tax (@${calculation.taxRate}%): ₹<strong>${calculation.taxAmount}</strong></span>
+                        <span>Total Payable: ₹<strong>${calculation.totalPayable}</strong></span>
+                    `;
+                    historyList.appendChild(listItem);
+                });
+            }
+        }
+
+        function clearHistory() {
+            if (confirm("Are you sure you want to clear the calculation history?")) {
+                calculationHistory = [];
+                localStorage.removeItem('electricBillHistory');
+                displayHistory();
+            }
+        }
+    </script>
+</body>
+</html>
+
